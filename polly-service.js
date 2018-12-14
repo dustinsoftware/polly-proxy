@@ -23,13 +23,12 @@ export class PollyService {
 					recordingsDir: path.join(__dirname, 'recordings')
 				}
 			},
-			recordFailedRequests: true,
-			recordIfMissing: false,
-			matchRequestBy: {
-				headers: {
-					exclude: ['Authorization']
-				}
-			},
+			logging: true,
+			recordIfMissing: true,
+			matchRequestsBy: {
+				headers: false,
+				order: false,
+ 			},
 		});
 	}
 
