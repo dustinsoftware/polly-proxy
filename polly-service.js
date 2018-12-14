@@ -9,7 +9,7 @@ Polly.register(FSPersister);
 export class PollyService {
 	pollyInstance = null;
 
-	async initializeTest(testName) {
+	initializeTest = async testName => {
 		if (this.pollyInstance) {
 			await this.stop();
 			this.pollyInstance = null;
@@ -27,28 +27,28 @@ export class PollyService {
 			recordIfMissing: true,
 			matchRequestsBy: {
 				headers: false,
-				order: false,
- 			},
+				order: false
+			}
 		});
-	}
+	};
 
-	async record() {
+	record = async () => {
 		if (!this.pollyInstance) {
 			throw new Error('Polly was not initialized');
 		}
 
 		await this.pollyInstance.record();
-	}
+	};
 
-	async replay() {
+	replay = async () => {
 		if (!this.pollyInstance) {
 			throw new Error('Polly was not initialized');
 		}
 
 		await this.pollyInstance.replay();
-	}
+	};
 
-	async stop() {
+	stop = async () => {
 		if (!this.pollyInstance) {
 			throw new Error('Polly was not initialized');
 		}
@@ -56,5 +56,5 @@ export class PollyService {
 		await this.pollyInstance.flush();
 		await this.pollyInstance.stop();
 		this.pollyInstance = null;
-	}
+	};
 }
