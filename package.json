@@ -1,25 +1,27 @@
 {
-  "name": "unit-proxy-test",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "dependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.2.1",
-    "@babel/preset-env": "^7.2.0",
-    "@pollyjs/persister-fs": "^1.3.2",
-    "cross-env": "^5.2.0",
-    "express": "^4.16.4",
-    "http-proxy": "^1.17.0",
-    "yakbak": "^3.0.0"
-  },
-  "scripts": {
-    "yakbak": "yakbak",
-    "start": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 node --require @babel/register index.js"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.2.0",
-    "@babel/register": "^7.0.0",
-    "@pollyjs/adapter-node-http": "^1.4.0",
-    "@pollyjs/core": "^1.4.0"
-  }
+	"name": "unit-proxy-test",
+	"version": "1.0.0",
+	"main": "dist/index.js",
+	"license": "MIT",
+	"dependencies": {
+		"@pollyjs/adapter-node-http": "^1.4.0",
+		"@pollyjs/core": "^1.4.0",
+		"@pollyjs/persister-fs": "^1.3.2",
+		"express": "^4.16.4",
+		"http-proxy": "^1.17.0"
+	},
+	"scripts": {
+		"yakbak": "yakbak",
+		"build": "webpack",
+		"start": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 webpack --watch"
+	},
+	"devDependencies": {
+		"@types/node": "^10.12.15",
+		"cross-env": "^5.2.0",
+		"nodemon-webpack-plugin": "^4.0.6",
+		"ts-loader": "^5.3.1",
+		"typescript": "^3.2.2",
+		"webpack": "^4.27.1",
+		"webpack-cli": "^3.1.2"
+	}
 }

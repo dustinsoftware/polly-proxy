@@ -6,10 +6,17 @@ import path from 'path';
 Polly.register(NodeHttpAdapter);
 Polly.register(FSPersister);
 
-export class PollyService {
-	pollyInstance = null;
+interface IPolly {
+	record: () => Promise<void>,
+	stop: () => Promise<void>,
+	replay: () => Promise<void>,
+	flush: () => Promise<void>,
+};
 
-	initializeTest = async testName => {
+export class PollyService {
+	pollyInstance: IPolly = null;
+
+	initializeTest = async (testName: string) => {
 		if (this.pollyInstance) {
 			await this.stop();
 			this.pollyInstance = null;
