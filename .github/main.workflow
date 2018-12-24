@@ -1,15 +1,21 @@
 workflow "Build, Test" {
   on = "push"
-  resolves = ["Test"]
+  resolves = ["Build"]
 }
 
-action "Build" {
+action "Package restore" {
   uses = "actions/npm@master"
   args = "install"
 }
 
-action "Test" {
-  needs = "Build"
+action "Build" {
   uses = "actions/npm@master"
+  needs = ["Package restore"]
+  args = "build"
+}
+
+action "Test" {
+  uses = "actions/npm@master"
+  needs = ["Package restore"]
   args = "test"
 }
