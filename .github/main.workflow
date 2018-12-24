@@ -1,6 +1,6 @@
 workflow "Build, Test" {
   on = "push"
-  resolves = ["Build"]
+  resolves = ["Build", "Test"]
 }
 
 action "Package restore" {
@@ -16,6 +16,6 @@ action "Build" {
 
 action "Test" {
   uses = "actions/npm@master"
-  needs = ["Build"]
+  needs = ["Package restore"]
   args = "test"
 }
