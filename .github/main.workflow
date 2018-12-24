@@ -16,6 +16,6 @@ action "Build" {
 
 action "Test" {
   uses = "actions/npm@master"
-  needs = ["Package restore"]
+  needs = ["Build"]
   args = "test"
 }
