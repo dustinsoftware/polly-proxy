@@ -1,20 +1,13 @@
 import { Polly } from '@pollyjs/core';
-import * as NodeHttpAdapter from '@pollyjs/adapter-node-http';
-import * as FSPersister from '@pollyjs/persister-fs';
-const path = require('path');
+import NodeHttpAdapter from '@pollyjs/adapter-node-http';
+import FSPersister from '@pollyjs/persister-fs';
+import path from 'path';
 
 Polly.register(NodeHttpAdapter);
 Polly.register(FSPersister);
 
-interface IPolly {
-  record: () => Promise<void>;
-  stop: () => Promise<void>;
-  replay: () => Promise<void>;
-  flush: () => Promise<void>;
-}
-
 export class PollyService {
-  pollyInstance: IPolly = null;
+  pollyInstance: Polly = null;
 
   initializeTest = async (testName: string) => {
     if (this.pollyInstance) {

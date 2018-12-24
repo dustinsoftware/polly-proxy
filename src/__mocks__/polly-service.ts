@@ -1,5 +1,5 @@
 class Polly {
-  constructor(testName, options) {}
+  constructor(testName: string, options: any) {}
 
   record() {}
 

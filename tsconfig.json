@@ -8,13 +8,14 @@
 		"declaration": true,
 		"declarationDir": "./dist",
 		"downlevelIteration": true,
-		"noImplicitAny": false,
+		"noImplicitAny": true,
 		"noImplicitThis": true,
 		"forceConsistentCasingInFileNames": true,
 		"outDir": "./dist",
 		"noEmit": false,
 		"noEmitOnError": true,
 		"noUnusedLocals": true,
+		"esModuleInterop": true,
 		"lib": [
 			"es2017",
 			"es2017.object",
@@ -24,10 +25,9 @@
 			"dom"
 		],
 		"sourceMap": true,
-		"typeRoots": [
-			"./typings",
-			"./node_modules/@types"
-		]
+		"paths": {
+			"@pollyjs/adapter-node-http": ["./types/pollyjs__adapter-node-http"]
+		}
 	},
 	"include": [
 		"./src/",

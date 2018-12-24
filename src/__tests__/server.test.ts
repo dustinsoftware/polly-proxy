@@ -1,13 +1,14 @@
-const http = require('http');
-const express = require('express');
-const supertest = require('supertest');
+import http from 'http';
+import express from 'express';
+import supertest from 'supertest';
 import { createExpressInstance } from '../server';
-import * as fetch from 'isomorphic-fetch';
+import fetch from 'isomorphic-fetch';
+import { AddressInfo } from 'net';
 
 jest.mock('../polly-service.ts');
 
 describe('proxy api', () => {
-  let app, server;
+  let app: express.Application, server: http.Server;
 
   beforeAll(done => {
     app = createExpressInstance();
@@ -31,21 +32,21 @@ describe('proxy api', () => {
 
     const sampleHttpServer = express()
       .get('/', (req, res) => res.status(200).send('hello proxy'))
-      .listen();
+      .listen(null);
 
     response = await supertest(app)
       .post(`/addproxy`)
       .query({
-        proxyPath: `http://localhost:${sampleHttpServer.address().port}`,
+        proxyPath: `http://localhost:${(sampleHttpServer.address() as AddressInfo).port}`,
       });
     expect(response.status).toBe(200);
     const startedProxy = JSON.parse(response.text);
 
     expect(startedProxy.port).toBeGreaterThanOrEqual(3000);
 
-    expect((await fetch(`http://localhost:${startedProxy.port}`).then(x => x.text()))).toBe(
-      'hello proxy',
-    );
+    expect(
+      await fetch(`http://localhost:${startedProxy.port}`).then(x => x.text()),
+    ).toBe('hello proxy');
 
     sampleHttpServer.close();
 

@@ -1,5 +1,5 @@
-const express = require('express');
-import * as httpProxy from 'http-proxy';
+import express from 'express';
+import httpProxy from 'http-proxy';
 const proxy = httpProxy.createProxyServer({});
 
 export interface ProxyInstance {

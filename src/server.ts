@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express';
 import { PollyService } from './polly-service';
 import { ProxyService } from './proxy-service';
 const pollyService = new PollyService();
