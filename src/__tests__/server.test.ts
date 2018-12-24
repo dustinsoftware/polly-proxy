@@ -1,6 +1,8 @@
 const http = require('http');
+const express = require('express');
 const supertest = require('supertest');
 import { createExpressInstance } from '../server';
+import * as fetch from 'isomorphic-fetch';
 
 jest.mock('../polly-service.ts');
 
@@ -27,20 +29,39 @@ describe('proxy api', () => {
   it('adds a proxy', async () => {
     let response;
 
+    const sampleHttpServer = express()
+      .get('/', (req, res) => res.status(200).send('hello proxy'))
+      .listen();
+
+    response = await supertest(app)
+      .post(`/addproxy`)
+      .query({
+        proxyPath: `http://localhost:${sampleHttpServer.address().port}`,
+      });
+    expect(response.status).toBe(200);
+    const startedProxy = JSON.parse(response.text);
+
+    expect(startedProxy.port).toBeGreaterThanOrEqual(3000);
+
+    expect((await fetch(`http://localhost:${startedProxy.port}`).then(x => x.text()))).toBe(
+      'hello proxy',
+    );
+
+    sampleHttpServer.close();
+
+    response = await supertest(app).post('/resetproxies');
+    expect(response.status).toBe(200);
+  });
+
+  it('starts and stops a test recording', async () => {
+    let response;
+
     response = await supertest(app)
       .post(`/replay`)
       .query({ testName: 'unit-test' });
     expect(response.status).toBe(200);
 
-    response = await supertest(app)
-      .post(`/addproxy`)
-      .query({ proxyPath: 'http://example.com' });
-    expect(response.status).toBe(200);
-
     response = await supertest(app).post(`/stop`);
-    expect(response.status).toBe(200);
-
-    response = await supertest(app).post('/resetproxies');
     expect(response.status).toBe(200);
   });
 });
