@@ -13,12 +13,16 @@
 	"scripts": {
 		"yakbak": "yakbak",
 		"build": "webpack",
-		"start": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 webpack --watch"
+		"start": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 webpack --watch",
+		"test": "jest"
 	},
 	"devDependencies": {
+		"@types/jest": "^23.3.10",
 		"@types/node": "^10.12.15",
 		"cross-env": "^5.2.0",
+		"jest": "^23.6.0",
 		"nodemon-webpack-plugin": "^4.0.6",
+		"ts-jest": "^23.10.5",
 		"ts-loader": "^5.3.1",
 		"typescript": "^3.2.2",
 		"webpack": "^4.27.1",
