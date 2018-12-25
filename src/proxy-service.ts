@@ -1,5 +1,7 @@
 import express from 'express';
+import http from 'http';
 import httpProxy from 'http-proxy';
+import { AddressInfo } from 'net';
 const proxy = httpProxy.createProxyServer({});
 
 export interface ProxyInstance {
@@ -13,21 +15,15 @@ export class ProxyService {
   constructor() {
     this.proxyMap = Array(100)
       .fill(0)
-      .map((x, i) => ({
-        port: 3100 + i,
+      .map(() => ({
+        port: null,
         proxyPath: null,
         timer: null,
         expressInstance: null,
       }));
   }
 
-  static createApiProxy({
-    port,
-    url,
-  }: {
-    port: number | string;
-    url: string;
-  }): { close: () => void } {
+  static createApiProxy({ url }: { url: string }): http.Server {
     const expressInstance = express().use(async (req, res, next) => {
       try {
         console.log(`${req.method} ${req.url}`);
@@ -48,7 +44,7 @@ export class ProxyService {
       }
     });
 
-    return expressInstance.listen(port);
+    return expressInstance.listen(null);
   }
 
   proxyMap: ProxyInstance[];
@@ -63,9 +59,9 @@ export class ProxyService {
     proxyInstance.proxyPath = proxyPath;
 
     const expressInstance = ProxyService.createApiProxy({
-      port: proxyInstance.port,
       url: proxyInstance.proxyPath,
     });
+    proxyInstance.port = (expressInstance.address() as AddressInfo).port;
     proxyInstance.expressInstance = expressInstance;
     proxyInstance.timer = setTimeout(() => {
       clearTimeout(proxyInstance.timer);
