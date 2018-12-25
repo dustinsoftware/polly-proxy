@@ -14,13 +14,15 @@ export class PollyService {
       await this.stop();
       this.pollyInstance = null;
     }
+    const recordingsDir = path.join(__dirname, 'recordings');
+    console.info(`Recording to ${recordingsDir}`);
 
     this.pollyInstance = new Polly(testName, {
       adapters: ['node-http'],
       persister: 'fs',
       persisterOptions: {
         fs: {
-          recordingsDir: path.join(__dirname, 'recordings'),
+          recordingsDir
         },
       },
       logging: true,

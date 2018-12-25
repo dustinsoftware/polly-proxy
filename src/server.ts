@@ -11,7 +11,8 @@ export const createExpressInstance = () =>
         await pollyService.stop();
         res.status(200).send();
       } catch (e) {
-        res.status(500).send(e.message);
+        res.status(500);
+        console.error(e);
       }
     })
     .post('/replay', async (req, res) => {
@@ -24,7 +25,8 @@ export const createExpressInstance = () =>
         await pollyService.replay();
         res.status(200).send();
       } catch (e) {
-        res.status(500).send(e.message);
+        res.status(500);
+        console.error(e);
       }
     })
     .post('/addproxy', async (req, res) => {
@@ -40,7 +42,8 @@ export const createExpressInstance = () =>
           proxyPath: proxyInstance.proxyPath,
         });
       } catch (e) {
-        res.status(500).send(e.message);
+        res.status(500);
+        console.error(e);
       }
     })
     .post('/resetproxies', async (req, res) => {
@@ -48,6 +51,7 @@ export const createExpressInstance = () =>
         proxyService.closeAllProxies();
         res.status(200).send();
       } catch (e) {
-        res.status(500).send(e.message);
+        res.status(500);
+        console.error(e);
       }
     });
