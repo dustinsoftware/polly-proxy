@@ -25,8 +25,9 @@ export class PollyService {
           recordingsDir
         },
       },
-      logging: true,
-      recordIfMissing: true,
+      logging: false,
+			recordIfMissing: true,
+			recordFailedRequests: true, // We need to patch polly, otherwise an unhandled exception is thrown...
       matchRequestsBy: {
         headers: false,
         order: false,
@@ -52,7 +53,7 @@ export class PollyService {
 
   stop = async () => {
     if (!this.pollyInstance) {
-      throw new Error('Polly was not initialized');
+      return;
     }
 
     await this.pollyInstance.flush();

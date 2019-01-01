@@ -72,6 +72,8 @@ export class ProxyService {
       console.log(`Closed ${proxyInstance.port}`);
     }, 20000);
 
+		console.log(`Opened ${proxyInstance.port}`);
+
     return proxyInstance;
   }
 
