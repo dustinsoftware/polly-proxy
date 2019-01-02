@@ -1,19 +1,19 @@
-import http from 'http';
 import express from 'express';
 import fetch from 'isomorphic-fetch';
 import { AddressInfo } from 'net';
+import stoppable, { StoppableServer } from 'stoppable';
 
 describe('server e2e', () => {
-	let server: http.Server;
+	let server: StoppableServer;
 
 	let counter: number;
 
 	beforeAll(async () => {
-		server = await express()
+		server = stoppable(await express()
 			.get('/counter', (req, res) => {
-				res.set('Connection', 'close').json({ counter: counter++ });
+				res.json({ counter: counter++ });
 			})
-			.listen(3001);
+			.listen(3001));
 	});
 
 	beforeEach(async () => {
@@ -31,7 +31,7 @@ describe('server e2e', () => {
 	});
 
 	afterAll(async () => {
-		await server.close();
+		await server.stop();
 	});
 
 	it('does nothing', () => Promise.resolve());
