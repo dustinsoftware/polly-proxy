@@ -6,6 +6,9 @@ const proxyService = new ProxyService();
 
 export const createExpressInstance = () =>
 	express()
+		.get('/', async (req, res) => {
+			res.status(200).send('polly-proxy');
+		})
 		.post('/stop', async (req, res) => {
 			try {
 				await pollyService.stop();

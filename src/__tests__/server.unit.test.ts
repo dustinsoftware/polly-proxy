@@ -23,7 +23,7 @@ describe('proxy api', () => {
 	it('does nothing', () => Promise.resolve());
 
 	it('returns 404', async () => {
-		const response = await supertest(app).get('/');
+		const response = await supertest(app).get('/404');
 		expect(response.status).toBe(404);
 	});
 
