@@ -4,18 +4,18 @@ workflow "Build, Test" {
 }
 
 action "Package restore" {
-  uses = "actions/npm@master"
-  args = "install"
+  uses = "docker://node:10"
+  runs = "yarn"
 }
 
 action "Build" {
-  uses = "actions/npm@master"
+  uses = "docker://node:10"
   needs = ["Package restore"]
-  args = "build"
+  runs = "yarn build"
 }
 
 action "Test" {
-  uses = "actions/npm@master"
-  needs = ["Package restore"]
-  args = "test"
+  uses = "docker://node:10"
+  needs = ["Build"]
+  runs = "yarn test:ci"
 }
