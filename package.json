@@ -1,7 +1,7 @@
 {
-	"name": "unit-proxy-test",
-	"version": "1.0.0",
-	"main": "dist/index.js",
+	"name": "polly-proxy",
+	"version": "0.1.0",
+	"main": "dist/bundle.js",
 	"license": "MIT",
 	"dependencies": {
 		"@pollyjs/adapter-node-http": "^1.4.0",
