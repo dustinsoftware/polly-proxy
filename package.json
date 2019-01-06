@@ -11,7 +11,7 @@
 		"http-proxy": "^1.17.0"
 	},
 	"bin": {
-		"polly-proxy": "./dist/bundle.js"
+		"polly-proxy": "./bin/polly-proxy"
 	},
 	"scripts": {
 		"yakbak": "yakbak",
