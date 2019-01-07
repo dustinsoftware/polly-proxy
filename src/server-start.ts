@@ -3,4 +3,8 @@ process.on('unhandledRejection', exception => {
 	throw exception;
 });
 
-createExpressInstance().listen(3000);
+const port = 3000;
+
+createExpressInstance().listen(port);
+
+console.log(`Server listening on port ${port}. See the docs for how to use: https://github.com/dustinsoftware/polly-proxy`);
