@@ -70,7 +70,7 @@ export class ProxyService {
 			proxyInstance.proxyPath = null;
 
 			console.log(`Closed ${proxyInstance.port}`);
-		}, 20000);
+		}, 120000);
 
 		console.log(`Opened ${proxyInstance.port}`);
 
