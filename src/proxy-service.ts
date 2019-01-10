@@ -26,7 +26,7 @@ export class ProxyService {
 	static createApiProxy({ url }: { url: string }): http.Server {
 		const expressInstance = express().use(async (req, res, next) => {
 			try {
-				console.log(`${req.method} ${req.url}`);
+				console.log(`${(new Date()).toISOString()} ${req.method} ${req.url}`);
 
 				proxy.web(
 					req,
@@ -69,10 +69,10 @@ export class ProxyService {
 
 			proxyInstance.proxyPath = null;
 
-			console.log(`Closed ${proxyInstance.port}`);
+			console.log(`${(new Date()).toISOString()} Closed ${proxyInstance.port}`);
 		}, 120000);
 
-		console.log(`Opened ${proxyInstance.port}`);
+		console.log(`${(new Date()).toISOString()} Opened ${proxyInstance.port}`);
 
 		return proxyInstance;
 	}
