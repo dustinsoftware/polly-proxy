@@ -56,6 +56,24 @@ describe('proxy api', () => {
 		expect(response.status).toBe(200);
 	});
 
+	it('returns 500 if proxied service is down', async () => {
+		let response;
+
+		response = await supertest(app)
+			.post(`/addproxy`)
+			.query({
+				proxyPath: `http://localhost:${12345}`,
+			});
+		expect(response.status).toBe(200);
+		const startedProxy = JSON.parse(response.text);
+
+		expect(startedProxy.port).toBeGreaterThanOrEqual(3000);
+
+		expect(
+			await fetch(`http://localhost:${startedProxy.port}`).then(x => x.status),
+		).toBe(500);
+	});
+
 	it('starts and stops a test recording', async () => {
 		let response;
 
