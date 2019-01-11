@@ -72,6 +72,9 @@ describe('proxy api', () => {
 		expect(
 			await fetch(`http://localhost:${startedProxy.port}`).then(x => x.status),
 		).toBe(500);
+
+		response = await supertest(app).post('/resetproxies');
+		expect(response.status).toBe(200);
 	});
 
 	it('starts and stops a test recording', async () => {
