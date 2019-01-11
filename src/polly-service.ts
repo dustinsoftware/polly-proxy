@@ -29,9 +29,16 @@ export class PollyService {
 			recordIfMissing: true,
 			recordFailedRequests: true, // We need to patch polly, otherwise an unhandled exception is thrown...
 			matchRequestsBy: {
-				headers: false,
-				order: false,
-			},
+				headers: headers => {
+					return {
+						'Authorization': headers['Authorization'],
+					};
+				},
+				order: true,
+				url: {
+					protocol: false,
+				}
+			}
 		});
 	};
 
