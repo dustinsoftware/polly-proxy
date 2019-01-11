@@ -1,7 +1,16 @@
 import { Polly } from '@pollyjs/core';
-import NodeHttpAdapter from '@pollyjs/adapter-node-http';
+import NodeHttpAdapter, { PollyRequest } from 'dpm-adapter-node-http';
 import FSPersister from '@pollyjs/persister-fs';
 import path from 'path';
+
+let parentOnRequest = NodeHttpAdapter.prototype.onRequest;
+NodeHttpAdapter.prototype.onRequest = function (request: PollyRequest) {
+	request.promise.catch(() => {});
+
+	if (parentOnRequest) {
+		return parentOnRequest.call(this, request);
+	}
+}
 
 Polly.register(NodeHttpAdapter);
 Polly.register(FSPersister);
