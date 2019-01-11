@@ -32,6 +32,20 @@ export const createExpressInstance = () =>
 				console.error(e);
 			}
 		})
+		.post('/record', async (req, res) => {
+			try {
+				if (!req.query.testName) {
+					throw new Error('Empty testName parameter');
+				}
+
+				await pollyService.initializeTest(req.query.testName);
+				await pollyService.record();
+				res.status(200).send();
+			} catch (e) {
+				res.status(500).send();
+				console.error(e);
+			}
+		})
 		.post('/addproxy', async (req, res) => {
 			try {
 				if (!req.query.proxyPath) {
