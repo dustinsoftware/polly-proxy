@@ -114,4 +114,20 @@ describe('server e2e', () => {
 			).then(x => x.json())).counter,
 		).toBe(5);
 	});
+
+	it('returns 500 if proxied service is down', async () => {
+		const response = await fetch(
+			`http://localhost:3000/addproxy?proxyPath=${encodeURIComponent(
+				`http://localhost:12345`,
+			)}`,
+			{
+				method: 'POST',
+			},
+		).then(x => x.json());
+		expect(response.port).toBeGreaterThan(3000);
+
+		expect(
+			await fetch(`http://localhost:${response.port}`).then(x => x.status),
+		).toBe(500);
+	});
 });
