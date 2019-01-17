@@ -9,40 +9,44 @@ class Polly {
 	stop() {}
 }
 export class PollyService {
-	pollyInstance: Polly | null = null;
+	_pollyInstance: Polly | null = null;
+
+	isInitialized = () => this._pollyInstance != null;
 
 	initializeTest = async (testName: string) => {
-		if (this.pollyInstance) {
+		if (this._pollyInstance) {
 			await this.stop();
-			this.pollyInstance = null;
+			this._pollyInstance = null;
 		}
 
-		this.pollyInstance = new Polly(testName, {});
+		this._pollyInstance = new Polly(testName, {});
 	};
 
+	configure = async (options: any) => {};
+
 	record = async () => {
-		if (!this.pollyInstance) {
+		if (!this._pollyInstance) {
 			throw new Error('Polly was not initialized');
 		}
 
-		await this.pollyInstance.record();
+		await this._pollyInstance.record();
 	};
 
 	replay = async () => {
-		if (!this.pollyInstance) {
+		if (!this._pollyInstance) {
 			throw new Error('Polly was not initialized');
 		}
 
-		await this.pollyInstance.replay();
+		await this._pollyInstance.replay();
 	};
 
 	stop = async () => {
-		if (!this.pollyInstance) {
+		if (!this._pollyInstance) {
 			throw new Error('Polly was not initialized');
 		}
 
-		await this.pollyInstance.flush();
-		await this.pollyInstance.stop();
-		this.pollyInstance = null;
+		await this._pollyInstance.flush();
+		await this._pollyInstance.stop();
+		this._pollyInstance = null;
 	};
 }

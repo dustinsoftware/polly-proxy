@@ -130,4 +130,23 @@ describe('server e2e', () => {
 			await fetch(`http://localhost:${response.port}`, { method: 'POST' }).then(x => x.status),
 		).toBe(500);
 	});
+
+	it('returns 400 if required parameters are empty', async () => {
+		expect((await fetch('http://localhost:3000/record', { method: 'POST' })).status).toBe(400);
+		expect((await fetch('http://localhost:3000/replay', { method: 'POST' })).status).toBe(400);
+		expect((await fetch('http://localhost:3000/addproxy', { method: 'POST' })).status).toBe(400);
+		expect((await fetch('http://localhost:3000/configure', { method: 'POST' })).status).toBe(400);
+	});
+
+	it('configures the current proxy instance', async () => {
+		let response;
+
+		response = await fetch(`http://localhost:3000/replay?testName=server-e2e`, { method: 'POST' });
+		expect(response.status).toBe(200);
+
+		response = await fetch(`http://localhost:3000/configure?recordFailedRequests=1`, {
+			method: 'POST',
+		});
+		expect(response.status).toBe(200);
+	});
 });

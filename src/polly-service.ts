@@ -6,28 +6,37 @@ import path from 'path';
 Polly.register(NodeHttpAdapter);
 Polly.register(FSPersister);
 
+export interface PollyServiceOptions {
+	recordIfMissing: boolean | undefined;
+	recordFailedRequests?: boolean;
+	order?: boolean;
+}
+
 export class PollyService {
-	pollyInstance: Polly | null = null;
+	private _pollyInstance: Polly | null = null;
+
+	isInitialized = () => this._pollyInstance != null;
 
 	initializeTest = async (testName: string) => {
-		if (this.pollyInstance) {
+		if (this._pollyInstance) {
 			await this.stop();
-			this.pollyInstance = null;
+			this._pollyInstance = null;
 		}
 		const recordingsDir = path.join(__dirname, 'recordings');
 		console.info(`Recording to ${recordingsDir}`);
 
-		this.pollyInstance = new Polly(testName, {
+		this._pollyInstance = new Polly(testName, {
 			adapters: ['node-http'],
 			persister: 'fs',
 			persisterOptions: {
+				keepUnusedRequests: true,
 				fs: {
 					recordingsDir,
 				},
 			},
 			logging: false,
-			recordIfMissing: true,
-			recordFailedRequests: true, // We need to patch polly, otherwise an unhandled exception is thrown...
+			recordIfMissing: false,
+			recordFailedRequests: true,
 			matchRequestsBy: {
 				headers: headers => {
 					return {
@@ -42,29 +51,43 @@ export class PollyService {
 		});
 	};
 
-	record = async () => {
-		if (!this.pollyInstance) {
+	configure = async (options: PollyServiceOptions) => {
+		if (!this._pollyInstance) {
 			throw new Error('Polly was not initialized');
 		}
 
-		await this.pollyInstance.record();
+		this._pollyInstance.configure({
+			matchRequestsBy: {
+				order: options.order,
+			},
+			recordIfMissing: options.recordIfMissing,
+			recordFailedRequests: options.recordFailedRequests,
+		});
+	};
+
+	record = async () => {
+		if (!this._pollyInstance) {
+			throw new Error('Polly was not initialized');
+		}
+
+		await this._pollyInstance.record();
 	};
 
 	replay = async () => {
-		if (!this.pollyInstance) {
+		if (!this._pollyInstance) {
 			throw new Error('Polly was not initialized');
 		}
 
-		await this.pollyInstance.replay();
+		await this._pollyInstance.replay();
 	};
 
 	stop = async () => {
-		if (!this.pollyInstance) {
+		if (!this._pollyInstance) {
 			return;
 		}
 
-		await this.pollyInstance.flush();
-		await this.pollyInstance.stop();
-		this.pollyInstance = null;
+		await this._pollyInstance.flush();
+		await this._pollyInstance.stop();
+		this._pollyInstance = null;
 	};
 }

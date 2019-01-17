@@ -1,6 +1,6 @@
 import express from 'express';
 import expressPromiseRouter from 'express-promise-router';
-import { PollyService } from './polly-service';
+import { PollyService, PollyServiceOptions } from './polly-service';
 import { ProxyService } from './proxy-service';
 
 const router = expressPromiseRouter();
@@ -54,5 +54,30 @@ export const createExpressInstance = () =>
 			.post('/resetproxies', async (req, res) => {
 				proxyService.closeAllProxies();
 				res.status(200).send();
+			})
+			.post('/configure', async (req, res) => {
+				const configuration: PollyServiceOptions = {
+					recordFailedRequests:
+						req.query.recordFailedRequests == null
+							? undefined
+							: Boolean(req.query.recordFailedRequests),
+					order: req.query.order == null ? undefined : Boolean(req.query.order),
+					recordIfMissing:
+						req.query.recordIfMissing == null ? undefined : Boolean(req.query.recordIfMissing),
+				};
+
+				if (!pollyService.isInitialized()) {
+					res
+						.status(400)
+						.send({ error: 'Polly must be initialized with /record or /replay first.' });
+				} else if (Object.values(configuration).filter(x => x != null).length === 0) {
+					res.status(400).send({
+						error:
+							'At least one valid configuration option must be specified as a query parameter.',
+					});
+				} else {
+					await pollyService.configure(configuration);
+					res.status(200).send();
+				}
 			}),
 	);

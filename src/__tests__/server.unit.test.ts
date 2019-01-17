@@ -84,4 +84,25 @@ describe('proxy api', () => {
 		response = await supertest(app).post(`/stop`);
 		expect(response.status).toBe(200);
 	});
+
+	it('returns 400 if required parameters are empty', async () => {
+		expect((await supertest(app).post('/record')).status).toBe(400);
+		expect((await supertest(app).post('/replay')).status).toBe(400);
+		expect((await supertest(app).post('/addproxy')).status).toBe(400);
+		expect((await supertest(app).post('/configure')).status).toBe(400);
+	});
+
+	it('configures the current proxy instance', async () => {
+		let response;
+
+		response = await supertest(app)
+			.post(`/replay`)
+			.query({ testName: 'unit-test' });
+		expect(response.status).toBe(200);
+
+		response = await supertest(app)
+			.post(`/configure`)
+			.query({ recordFailedRequests: true });
+		expect(response.status).toBe(200);
+	});
 });
