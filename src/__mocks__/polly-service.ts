@@ -9,7 +9,7 @@ class Polly {
 	stop() {}
 }
 export class PollyService {
-	pollyInstance: Polly;
+	pollyInstance: Polly | null = null;
 
 	initializeTest = async (testName: string) => {
 		if (this.pollyInstance) {

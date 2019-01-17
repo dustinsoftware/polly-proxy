@@ -7,7 +7,7 @@ Polly.register(NodeHttpAdapter);
 Polly.register(FSPersister);
 
 export class PollyService {
-	pollyInstance: Polly = null;
+	pollyInstance: Polly | null = null;
 
 	initializeTest = async (testName: string) => {
 		if (this.pollyInstance) {
@@ -31,14 +31,14 @@ export class PollyService {
 			matchRequestsBy: {
 				headers: headers => {
 					return {
-						'Authorization': headers['Authorization'],
+						Authorization: headers['Authorization'],
 					};
 				},
 				order: true,
 				url: {
 					protocol: false,
-				}
-			}
+				},
+			},
 		});
 	};
 

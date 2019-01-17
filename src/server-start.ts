@@ -7,4 +7,6 @@ const port = 3000;
 
 createExpressInstance().listen(port);
 
-console.log(`Server listening on port ${port}. See the docs for how to use: https://github.com/dustinsoftware/polly-proxy`);
+console.log(
+	`Server listening on port ${port}. See the docs for how to use: https://github.com/dustinsoftware/polly-proxy`,
+);

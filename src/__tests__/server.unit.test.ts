@@ -37,18 +37,16 @@ describe('proxy api', () => {
 		response = await supertest(app)
 			.post(`/addproxy`)
 			.query({
-				proxyPath: `http://localhost:${
-					(sampleHttpServer.address() as AddressInfo).port
-				}`,
+				proxyPath: `http://localhost:${(sampleHttpServer.address() as AddressInfo).port}`,
 			});
 		expect(response.status).toBe(200);
 		const startedProxy = JSON.parse(response.text);
 
 		expect(startedProxy.port).toBeGreaterThanOrEqual(3000);
 
-		expect(
-			await fetch(`http://localhost:${startedProxy.port}`).then(x => x.text()),
-		).toBe('hello proxy');
+		expect(await fetch(`http://localhost:${startedProxy.port}`).then(x => x.text())).toBe(
+			'hello proxy',
+		);
 
 		sampleHttpServer.close();
 
@@ -69,9 +67,7 @@ describe('proxy api', () => {
 
 		expect(startedProxy.port).toBeGreaterThanOrEqual(3000);
 
-		expect(
-			await fetch(`http://localhost:${startedProxy.port}`).then(x => x.status),
-		).toBe(500);
+		expect(await fetch(`http://localhost:${startedProxy.port}`).then(x => x.status)).toBe(500);
 
 		response = await supertest(app).post('/resetproxies');
 		expect(response.status).toBe(200);

@@ -16,6 +16,7 @@
 		"noEmitOnError": true,
 		"noUnusedLocals": true,
 		"esModuleInterop": true,
+		"strict": true,
 		"lib": [
 			"es2017",
 			"es2017.object",
@@ -29,10 +30,6 @@
 			"@pollyjs/adapter-node-http": ["./types/pollyjs__adapter-node-http"]
 		}
 	},
-	"include": [
-		"./src/",
-	],
-	"exclude": [
-		"node_modules"
-	]
+	"include": ["./src/"],
+	"exclude": ["node_modules"]
 }
