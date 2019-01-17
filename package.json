@@ -4,9 +4,9 @@
 	"main": "dist/bundle.js",
 	"license": "MIT",
 	"dependencies": {
-		"@pollyjs/core": "^1.4.0",
+		"@pollyjs/adapter-node-http": "^1.4.2",
+		"@pollyjs/core": "^1.4.2",
 		"@pollyjs/persister-fs": "^1.3.2",
-		"dpm-adapter-node-http": "^0.0.1",
 		"express": "^4.16.4",
 		"http-proxy": "^1.17.0"
 	},
