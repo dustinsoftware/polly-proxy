@@ -20,7 +20,8 @@ export const createExpressInstance = () =>
 			})
 			.post('/replay', async (req, res) => {
 				if (!req.query.testName) {
-					throw new Error('Empty testName parameter');
+					res.status(400).send({ error: 'Empty testName parameter' });
+					return;
 				}
 
 				await pollyService.initializeTest(req.query.testName);
@@ -29,7 +30,8 @@ export const createExpressInstance = () =>
 			})
 			.post('/record', async (req, res) => {
 				if (!req.query.testName) {
-					throw new Error('Empty testName parameter');
+					res.status(400).send({ error: 'Empty testName parameter' });
+					return;
 				}
 
 				await pollyService.initializeTest(req.query.testName);
@@ -38,7 +40,8 @@ export const createExpressInstance = () =>
 			})
 			.post('/addproxy', async (req, res) => {
 				if (!req.query.proxyPath) {
-					throw new Error('Empty proxyPath parameter');
+					res.status(400).send({ error: 'Empty proxyPath parameter' });
+					return;
 				}
 
 				const proxyInstance = proxyService.createProxy(req.query.proxyPath);
