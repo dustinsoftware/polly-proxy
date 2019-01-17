@@ -1,25 +1,24 @@
 import express from 'express';
+import expressPromiseRouter from 'express-promise-router';
 import { PollyService } from './polly-service';
 import { ProxyService } from './proxy-service';
+
+const router = expressPromiseRouter();
+
 const pollyService = new PollyService();
 const proxyService = new ProxyService();
 
 export const createExpressInstance = () =>
-	express()
-		.get('/', async (req, res) => {
-			res.status(200).send('polly-proxy');
-		})
-		.post('/stop', async (req, res) => {
-			try {
+	express().use(
+		router
+			.get('/', async (req, res) => {
+				res.status(200).send('polly-proxy');
+			})
+			.post('/stop', async (req, res) => {
 				await pollyService.stop();
 				res.status(200).send();
-			} catch (e) {
-				res.status(500).send();
-				console.error(e);
-			}
-		})
-		.post('/replay', async (req, res) => {
-			try {
+			})
+			.post('/replay', async (req, res) => {
 				if (!req.query.testName) {
 					throw new Error('Empty testName parameter');
 				}
@@ -27,13 +26,8 @@ export const createExpressInstance = () =>
 				await pollyService.initializeTest(req.query.testName);
 				await pollyService.replay();
 				res.status(200).send();
-			} catch (e) {
-				res.status(500).send();
-				console.error(e);
-			}
-		})
-		.post('/record', async (req, res) => {
-			try {
+			})
+			.post('/record', async (req, res) => {
 				if (!req.query.testName) {
 					throw new Error('Empty testName parameter');
 				}
@@ -41,13 +35,8 @@ export const createExpressInstance = () =>
 				await pollyService.initializeTest(req.query.testName);
 				await pollyService.record();
 				res.status(200).send();
-			} catch (e) {
-				res.status(500).send();
-				console.error(e);
-			}
-		})
-		.post('/addproxy', async (req, res) => {
-			try {
+			})
+			.post('/addproxy', async (req, res) => {
 				if (!req.query.proxyPath) {
 					throw new Error('Empty proxyPath parameter');
 				}
@@ -58,17 +47,9 @@ export const createExpressInstance = () =>
 					port: proxyInstance.port,
 					proxyPath: proxyInstance.proxyPath,
 				});
-			} catch (e) {
-				res.status(500).send();
-				console.error(e);
-			}
-		})
-		.post('/resetproxies', async (req, res) => {
-			try {
+			})
+			.post('/resetproxies', async (req, res) => {
 				proxyService.closeAllProxies();
 				res.status(200).send();
-			} catch (e) {
-				res.status(500).send();
-				console.error(e);
-			}
-		});
+			}),
+	);
