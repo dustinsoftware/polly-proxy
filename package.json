@@ -10,7 +10,7 @@
     "express": "^4.16.4",
     "express-promise-router": "^3.0.3",
     "http-proxy": "^1.17.0",
-    "worker-nodes": "^1.6.1"
+    "worker-farm": "^1.6.0"
   },
   "bin": {
     "polly-proxy": "./bin/polly-proxy"
