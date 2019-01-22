@@ -9,7 +9,8 @@
     "@pollyjs/persister-fs": "^1.3.2",
     "express": "^4.16.4",
     "express-promise-router": "^3.0.3",
-    "http-proxy": "^1.17.0"
+    "http-proxy": "^1.17.0",
+    "worker-nodes": "^1.6.1"
   },
   "bin": {
     "polly-proxy": "./bin/polly-proxy"
@@ -19,7 +20,7 @@
     "build": "webpack",
     "prettier": "prettier --write \"./src/**/*.ts\"",
     "watch": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 webpack --watch",
-    "start": "node ./dist/bundle.js",
+    "start": "node ./dist/server-start.js",
     "test": "prettier --list-different \"./src/**/*.ts\" && jest",
     "test:ci": "start-server-and-test start http://localhost:3000 test",
     "prepublishOnly": "npm run build && npm run test:ci"

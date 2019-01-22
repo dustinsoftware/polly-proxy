@@ -1,7 +1,15 @@
 import express from 'express';
+import path from 'path';
 import expressPromiseRouter from 'express-promise-router';
 import { PollyService, PollyServiceOptions } from './polly-service';
 import { ProxyService } from './proxy-service';
+import WorkerNodes from 'worker-nodes';
+
+const workerNodes = new WorkerNodes(path.resolve(__dirname, '../dist/proxy-worker'), {
+	maxWorkers: 100,
+	workerEndurance: 5,
+	taskTimeout: 2000,
+});
 
 const router = expressPromiseRouter();
 
@@ -13,6 +21,14 @@ export const createExpressInstance = () =>
 		router
 			.get('/', async (req, res) => {
 				res.status(200).send('polly-proxy');
+			})
+			.get('/worker', async (req, res) => {
+				await workerNodes.ready();
+				console.log('ready');
+				const workerResponse = workerNodes.call.workerEntry({ query: req.query });
+				console.log(workerResponse);
+				await workerResponse;
+				res.status(200).send(workerResponse);
 			})
 			.post('/stop', async (req, res) => {
 				await pollyService.stop();

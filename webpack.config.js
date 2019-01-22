@@ -1,8 +1,7 @@
 const path = require('path');
 const NodemonPlugin = require('nodemon-webpack-plugin');
 
-module.exports = {
-	entry: './src/server-start.ts',
+const baseConfig = {
 	target: 'node',
 	mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
 	module: {
@@ -21,8 +20,27 @@ module.exports = {
 		__dirname: true
 	},
 	output: {
-		filename: 'bundle.js',
+		filename: '[name].js',
 		path: path.resolve(__dirname, 'dist')
 	},
-	plugins: [new NodemonPlugin({ nodeArgs: ['--inspect'] })]
 };
+
+module.exports = [
+	{
+		...baseConfig,
+		entry: {
+			'server-start': './src/server-start.ts',
+		},
+		plugins: [new NodemonPlugin({ nodeArgs: ['--inspect'] })]
+	},
+	{
+		...baseConfig,
+		entry: {
+			'proxy-worker': './src/proxy-worker.ts',
+		},
+		output: {
+			...baseConfig.output,
+			libraryTarget: 'commonjs'
+		}
+	},
+]
