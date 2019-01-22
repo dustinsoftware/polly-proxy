@@ -22,7 +22,7 @@
     "start": "node ./dist/bundle.js",
     "test": "prettier --list-different \"./src/**/*.ts\" && jest",
     "test:ci": "start-server-and-test start http://localhost:3000 test",
-    "prepublishOnly": "npm run test:ci"
+    "prepublishOnly": "npm run build && npm run test:ci"
   },
   "devDependencies": {
     "@types/express": "^4.16.0",
