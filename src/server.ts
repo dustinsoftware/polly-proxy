@@ -23,10 +23,12 @@ export const createExpressInstance = () =>
 				res.status(200).send('polly-proxy');
 			})
 			.get('/worker', async (req, res) => {
-				const workerResponse = new Promise(resolve =>
-					workerNodes.workerEntry({ query: req.query }, (callbackData: string) => {
-						console.log('callback invoked. ' + callbackData);
-						resolve();
+				const workerResponse = new Promise((resolve, reject) =>
+					workerNodes.workerEntry({ query: req.query }, (err: any, callbackData: string) => {
+						if (err) {
+							reject(err);
+						}
+						resolve(callbackData);
 					}),
 				);
 				res.status(200).send(await workerResponse);

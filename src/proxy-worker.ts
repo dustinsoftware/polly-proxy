@@ -1,4 +1,4 @@
-export function workerEntry(data: any) {
+export function workerEntry(data: any, callback: (err: Error | null, result: any) => void) {
 	console.log('Worker is running ' + process.pid + JSON.stringify(data));
-	return 'Hello from worker ' + process.pid;
+	callback(null, { result: 'Hello from worker ' + process.pid });
 }
