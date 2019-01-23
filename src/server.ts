@@ -5,11 +5,16 @@ import workerFarm from 'worker-farm';
 import { PollyService, PollyServiceOptions } from './polly-service';
 import { ProxyService } from './proxy-service';
 
+interface WorkerFarm {
+	[x: string]: Workers;
+	(callback: WorkerCallback): void;
+}
+
 const workerNodes = workerFarm(
 	{ maxCallTime: 2000 },
 	path.resolve(__dirname, '../dist/proxy-worker'),
 	['workerEntry'],
-);
+) as WorkerFarm;
 
 const router = expressPromiseRouter();
 
