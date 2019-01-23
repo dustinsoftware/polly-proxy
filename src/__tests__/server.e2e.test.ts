@@ -8,6 +8,8 @@ describe('server e2e', () => {
 
 	let counter: number;
 
+	let proxyInstanceUrl: string;
+
 	beforeAll(async () => {
 		server = stoppable(
 			await express()
@@ -21,12 +23,21 @@ describe('server e2e', () => {
 	beforeEach(async () => {
 		counter = 5;
 
-		let pollyResponse: string;
-		pollyResponse = await fetch('http://localhost:3000/stop?testName=server-e2e', {
-			method: 'POST',
-		}).then(x => x.text());
+		const createProxyResponse: { port: number } = JSON.parse(
+			await fetch(`http://localhost:3000/worker`, {
+				method: 'POST',
+			}).then(x => x.text()),
+		);
 
-		expect(pollyResponse).toBe('');
+		proxyInstanceUrl = `http://localhost:${createProxyResponse.port}/`;
+	});
+
+	afterEach(async () => {
+		expect(
+			await fetch(`${proxyInstanceUrl}stop?testName=server-e2e`, {
+				method: 'POST',
+			}).then(x => x.text()),
+		).toBe('');
 	});
 
 	afterAll(async () => {
@@ -38,7 +49,7 @@ describe('server e2e', () => {
 	it("doesn't persist requests before recording begins", async () => {
 		const random = Math.random();
 		const response = await fetch(
-			`http://localhost:3000/addproxy?proxyPath=${encodeURIComponent(
+			`${proxyInstanceUrl}addproxy?proxyPath=${encodeURIComponent(
 				`http://localhost:${(server.address() as AddressInfo).port}`,
 			)}`,
 			{
@@ -64,7 +75,7 @@ describe('server e2e', () => {
 
 	it('record API calls', async () => {
 		const response = await fetch(
-			`http://localhost:3000/addproxy?proxyPath=${encodeURIComponent(
+			`${proxyInstanceUrl}addproxy?proxyPath=${encodeURIComponent(
 				`http://localhost:${(server.address() as AddressInfo).port}`,
 			)}`,
 			{
@@ -74,7 +85,7 @@ describe('server e2e', () => {
 		expect(response.port).toBeGreaterThan(3000);
 
 		let replayResponse: string;
-		replayResponse = await fetch('http://localhost:3000/record?testName=server-e2e', {
+		replayResponse = await fetch(`${proxyInstanceUrl}record?testName=server-e2e`, {
 			method: 'POST',
 		}).then(x => x.text());
 
@@ -89,10 +100,10 @@ describe('server e2e', () => {
 		// should be a cache miss
 		expect(cacheMissResponse).toBe(5);
 
-		await fetch('http://localhost:3000/stop?testName=server-e2e').then(x => x.text());
+		await fetch(`${proxyInstanceUrl}stop?testName=server-e2e`).then(x => x.text());
 
 		// "rewind" the recording
-		replayResponse = await fetch('http://localhost:3000/replay?testName=server-e2e', {
+		replayResponse = await fetch(`${proxyInstanceUrl}replay?testName=server-e2e`, {
 			method: 'POST',
 		}).then(x => x.text());
 
@@ -107,12 +118,12 @@ describe('server e2e', () => {
 	});
 
 	it('returns 500 if proxied service is down', async () => {
-		await fetch('http://localhost:3000/record?testName=returns-500', {
+		await fetch(`${proxyInstanceUrl}record?testName=returns-500`, {
 			method: 'POST',
 		}).then(x => x.text());
 
 		let response = await fetch(
-			`http://localhost:3000/addproxy?proxyPath=${encodeURIComponent(`https://localhost:12345`)}`,
+			`${proxyInstanceUrl}addproxy?proxyPath=${encodeURIComponent(`https://localhost:12345`)}`,
 			{
 				method: 'POST',
 			},
@@ -132,19 +143,19 @@ describe('server e2e', () => {
 	});
 
 	it('returns 400 if required parameters are empty', async () => {
-		expect((await fetch('http://localhost:3000/record', { method: 'POST' })).status).toBe(400);
-		expect((await fetch('http://localhost:3000/replay', { method: 'POST' })).status).toBe(400);
-		expect((await fetch('http://localhost:3000/addproxy', { method: 'POST' })).status).toBe(400);
-		expect((await fetch('http://localhost:3000/configure', { method: 'POST' })).status).toBe(400);
+		expect((await fetch(`${proxyInstanceUrl}record`, { method: 'POST' })).status).toBe(400);
+		expect((await fetch(`${proxyInstanceUrl}replay`, { method: 'POST' })).status).toBe(400);
+		expect((await fetch(`${proxyInstanceUrl}addproxy`, { method: 'POST' })).status).toBe(400);
+		expect((await fetch(`${proxyInstanceUrl}configure`, { method: 'POST' })).status).toBe(400);
 	});
 
 	it('configures the current proxy instance', async () => {
 		let response;
 
-		response = await fetch(`http://localhost:3000/replay?testName=server-e2e`, { method: 'POST' });
+		response = await fetch(`${proxyInstanceUrl}replay?testName=server-e2e`, { method: 'POST' });
 		expect(response.status).toBe(200);
 
-		response = await fetch(`http://localhost:3000/configure?recordFailedRequests=1`, {
+		response = await fetch(`${proxyInstanceUrl}configure?recordFailedRequests=1`, {
 			method: 'POST',
 		});
 		expect(response.status).toBe(200);

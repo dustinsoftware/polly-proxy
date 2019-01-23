@@ -1,7 +1,7 @@
 import http from 'http';
 import express from 'express';
 import supertest from 'supertest';
-import { createExpressInstance } from '../server';
+import { createExpressInstance } from '../proxy-worker';
 import fetch from 'isomorphic-fetch';
 import { AddressInfo } from 'net';
 
@@ -49,9 +49,6 @@ describe('proxy api', () => {
 		);
 
 		sampleHttpServer.close();
-
-		response = await supertest(app).post('/resetproxies');
-		expect(response.status).toBe(200);
 	});
 
 	it('returns 500 if proxied service is down', async () => {
@@ -68,9 +65,6 @@ describe('proxy api', () => {
 		expect(startedProxy.port).toBeGreaterThanOrEqual(3000);
 
 		expect(await fetch(`http://localhost:${startedProxy.port}`).then(x => x.status)).toBe(500);
-
-		response = await supertest(app).post('/resetproxies');
-		expect(response.status).toBe(200);
 	});
 
 	it('starts and stops a test recording', async () => {
