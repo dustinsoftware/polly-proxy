@@ -1,23 +1,33 @@
 import http from 'http';
 import express from 'express';
 import supertest from 'supertest';
-import { createExpressInstance } from '../server';
+import { createExpressInstance } from '../proxy-worker';
 import fetch from 'isomorphic-fetch';
 import { AddressInfo } from 'net';
+import stoppable, { StoppableServer } from 'stoppable';
 
 jest.mock('../polly-service.ts');
 
 describe('proxy api', () => {
-	let app: express.Application, server: http.Server;
+	let app: express.Application, server: StoppableServer;
 
 	beforeAll(done => {
 		app = createExpressInstance();
-		server = http.createServer(app);
-		server.listen(done);
+		server = stoppable(http.createServer(app).listen(done));
 	});
 
 	afterAll(async () => {
-		await server.close();
+		try {
+			expect(
+				await supertest(app)
+					.post(`/stop`)
+					.then(x => x.status),
+			).toBe(200);
+
+			await new Promise(resolve => server.stop(resolve));
+		} catch (e) {
+			console.error(e);
+		}
 	});
 
 	it('does nothing', () => Promise.resolve());
@@ -30,9 +40,11 @@ describe('proxy api', () => {
 	it('adds a proxy', async () => {
 		let response;
 
-		const sampleHttpServer = express()
-			.get('/', (req, res) => res.status(200).send('hello proxy'))
-			.listen(null);
+		const sampleHttpServer = stoppable(
+			express()
+				.get('/', (req, res) => res.status(200).send('hello proxy'))
+				.listen(null),
+		);
 
 		response = await supertest(app)
 			.post(`/addproxy`)
@@ -48,10 +60,7 @@ describe('proxy api', () => {
 			'hello proxy',
 		);
 
-		sampleHttpServer.close();
-
-		response = await supertest(app).post('/resetproxies');
-		expect(response.status).toBe(200);
+		sampleHttpServer.stop();
 	});
 
 	it('returns 500 if proxied service is down', async () => {
@@ -68,9 +77,6 @@ describe('proxy api', () => {
 		expect(startedProxy.port).toBeGreaterThanOrEqual(3000);
 
 		expect(await fetch(`http://localhost:${startedProxy.port}`).then(x => x.status)).toBe(500);
-
-		response = await supertest(app).post('/resetproxies');
-		expect(response.status).toBe(200);
 	});
 
 	it('starts and stops a test recording', async () => {
@@ -79,9 +85,6 @@ describe('proxy api', () => {
 		response = await supertest(app)
 			.post(`/replay`)
 			.query({ testName: 'unit-test' });
-		expect(response.status).toBe(200);
-
-		response = await supertest(app).post(`/stop`);
 		expect(response.status).toBe(200);
 	});
 

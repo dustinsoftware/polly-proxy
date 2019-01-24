@@ -17,14 +17,7 @@
 		"noUnusedLocals": true,
 		"esModuleInterop": true,
 		"strict": true,
-		"lib": [
-			"es2017",
-			"es2017.object",
-			"es2016.array.include",
-			"es6",
-			"es2015.promise",
-			"dom"
-		],
+		"lib": ["es2017", "es2017.object", "es2016.array.include", "es6", "es2015.promise", "dom"],
 		"sourceMap": true,
 		"paths": {
 			"@pollyjs/adapter-node-http": ["./types/pollyjs__adapter-node-http"]

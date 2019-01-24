@@ -1,6 +1,11 @@
 workflow "Build, Test" {
   on = "push"
-  resolves = ["Build", "Test"]
+  resolves = ["Docker build"]
+}
+
+action "Docker build" {
+	uses = "actions/docker/cli@master"
+	args = "build . -t dustinsoftware/polly"
 }
 
 action "Package restore" {

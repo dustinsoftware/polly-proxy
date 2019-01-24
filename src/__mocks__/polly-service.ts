@@ -1,12 +1,21 @@
 class Polly {
 	constructor(testName: string, options: any) {}
 
-	record() {}
+	record() {
+		return;
+	}
 
-	replay() {}
+	replay() {
+		return;
+	}
 
-	flush() {}
-	stop() {}
+	flush() {
+		return Promise.resolve();
+	}
+
+	stop() {
+		return Promise.resolve();
+	}
 }
 export class PollyService {
 	_pollyInstance: Polly | null = null;
@@ -29,7 +38,7 @@ export class PollyService {
 			throw new Error('Polly was not initialized');
 		}
 
-		await this._pollyInstance.record();
+		this._pollyInstance.record();
 	};
 
 	replay = async () => {
@@ -37,7 +46,7 @@ export class PollyService {
 			throw new Error('Polly was not initialized');
 		}
 
-		await this._pollyInstance.replay();
+		this._pollyInstance.replay();
 	};
 
 	stop = async () => {

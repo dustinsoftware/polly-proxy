@@ -1,9 +1,5 @@
-cache:
-  directories:
-    - node_modules
-language: node_js
+services:
+  - docker
+
 script:
-  - yarn build
-  - yarn test:ci
-node_js:
-- "10"
+  - docker build -t dustinsoftware/polly .

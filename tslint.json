@@ -1,0 +1,6 @@
+{
+	"extends": ["tslint-config-prettier"],
+	"rules": {
+		"await-promise": [true, "Bluebird", "PromiseLike"]
+	}
+}

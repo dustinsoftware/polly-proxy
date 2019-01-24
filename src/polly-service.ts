@@ -70,7 +70,7 @@ export class PollyService {
 			throw new Error('Polly was not initialized');
 		}
 
-		await this._pollyInstance.record();
+		this._pollyInstance.record();
 	};
 
 	replay = async () => {
@@ -78,7 +78,7 @@ export class PollyService {
 			throw new Error('Polly was not initialized');
 		}
 
-		await this._pollyInstance.replay();
+		this._pollyInstance.replay();
 	};
 
 	stop = async () => {
