@@ -1,6 +1,6 @@
 {
   "name": "polly-proxy",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "main": "dist/bundle.js",
   "license": "MIT",
   "dependencies": {
