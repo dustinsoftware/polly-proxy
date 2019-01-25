@@ -13,7 +13,7 @@ interface WorkerFarm {
 
 const workerNodes = workerFarm(
 	{ maxCallTime: 120000, autoStart: false, maxCallsPerWorker: 1, maxConcurrentCallsPerWorker: 1 },
-	path.resolve(__dirname, '../dist/proxy-worker'),
+	path.resolve(__dirname, '../dist/proxy-worker.js'),
 	['workerEntry'],
 ) as WorkerFarm;
 

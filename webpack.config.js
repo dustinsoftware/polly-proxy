@@ -17,7 +17,7 @@ const baseConfig = {
 		extensions: ['.tsx', '.ts', '.js']
 	},
 	node: {
-		__dirname: true
+		__dirname: false,
 	},
 	output: {
 		filename: '[name].js',
