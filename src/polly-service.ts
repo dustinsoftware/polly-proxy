@@ -13,6 +13,12 @@ export interface PollyServiceOptions {
 }
 
 export class PollyService {
+	constructor(recordingDirectory: string) {
+		this._recordingDirectory = recordingDirectory;
+	}
+
+	private _recordingDirectory: string;
+
 	private _pollyInstance: Polly | null = null;
 
 	isInitialized = () => this._pollyInstance != null;
@@ -22,7 +28,8 @@ export class PollyService {
 			await this.stop();
 			this._pollyInstance = null;
 		}
-		const recordingsDir = path.join(__dirname, 'recordings');
+		const recordingsDir = path.resolve(this._recordingDirectory);
+
 		console.info(`Recording to ${recordingsDir}`);
 
 		this._pollyInstance = new Polly(testName, {

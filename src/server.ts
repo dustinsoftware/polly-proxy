@@ -28,7 +28,7 @@ async function getOpenPort() {
 	return port;
 }
 
-export const createExpressInstance = () =>
+export const createExpressInstance = ({ recordingDirectory }: { recordingDirectory: string }) =>
 	express().use(
 		router
 			.get('/', async (req, res) => {
@@ -36,7 +36,7 @@ export const createExpressInstance = () =>
 			})
 			.post('/worker', async (req, res) => {
 				const port = await getOpenPort();
-				workerNodes.workerEntry({ port }, (err: any, callbackData: string) => {
+				workerNodes.workerEntry({ port, recordingDirectory }, (err: any, callbackData: string) => {
 					if (err) {
 						console.error(err);
 					}

@@ -7,8 +7,8 @@ import { ProxyService } from './proxy-service';
 
 const router = expressPromiseRouter();
 
-const pollyService = new PollyService();
-const proxyService = new ProxyService();
+let pollyService: PollyService;
+let proxyService: ProxyService;
 let expressInstance: StoppableServer;
 let processDoneCallback: (err: Error | null, result: any) => void;
 
@@ -98,12 +98,15 @@ export const createExpressInstance = () =>
 	);
 
 export function workerEntry(
-	data: { port: number },
+	data: { port: number; recordingDirectory: string },
 	callback: (err: Error | null, result: any) => void,
 ) {
 	if (expressInstance != null) {
 		throw new Error('expressInstance has already been initialized!');
 	}
+
+	pollyService = new PollyService(data.recordingDirectory);
+	proxyService = new ProxyService();
 
 	expressInstance = stoppable(createExpressInstance().listen(data.port));
 
@@ -114,4 +117,9 @@ export function workerEntry(
 	setTimeout(closeInstance, 60000);
 
 	processDoneCallback = callback;
+}
+
+export function testEntry(recordingDirectory: string) {
+	pollyService = new PollyService(recordingDirectory);
+	proxyService = new ProxyService();
 }

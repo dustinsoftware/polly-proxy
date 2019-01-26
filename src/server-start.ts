@@ -1,5 +1,11 @@
-import { createExpressInstance } from './server';
 import stoppable from 'stoppable';
+import program from 'commander';
+import path from 'path';
+import { createExpressInstance } from './server';
+
+program
+	.option('-r, --recordingDir <recordingDir>', 'Recording directory', 'recordings')
+	.parse(process.argv);
 
 process.on('unhandledRejection', exception => {
 	throw exception;
@@ -7,10 +13,16 @@ process.on('unhandledRejection', exception => {
 
 const port = 3000;
 
-const expressInstance = stoppable(createExpressInstance().listen(port));
+const expressInstance = stoppable(
+	createExpressInstance({
+		recordingDirectory: path.resolve(program.recordingDir as string),
+	}).listen(port),
+);
 
 console.log(
-	`Server listening on port ${port}. See the docs for how to use: https://github.com/dustinsoftware/polly-proxy`,
+	`Server listening on port ${port}. Recordings saved to ${path.resolve(
+		program.recordingDir as string,
+	)}. See the docs for how to use: https://github.com/dustinsoftware/polly-proxy`,
 );
 
 process.on('SIGTERM', () => {
