@@ -10,6 +10,9 @@
 		"express": "^4.16.4",
 		"express-promise-router": "^3.0.3",
 		"http-proxy": "^1.17.0",
+		"isomorphic-fetch": "^2.2.1",
+		"stoppable": "^1.1.0",
+		"webpack-node-externals": "^1.7.2",
 		"worker-farm": "^1.6.0"
 	},
 	"bin": {
@@ -36,12 +39,10 @@
 		"@types/stoppable": "^1.1.0",
 		"@types/supertest": "^2.0.7",
 		"cross-env": "^5.2.0",
-		"isomorphic-fetch": "^2.2.1",
 		"jest": "^23.6.0",
 		"nodemon-webpack-plugin": "^4.0.6",
 		"prettier": "^1.15.3",
 		"start-server-and-test": "^1.7.11",
-		"stoppable": "^1.1.0",
 		"supertest": "^3.3.0",
 		"ts-jest": "^23.10.5",
 		"ts-loader": "^5.3.1",
