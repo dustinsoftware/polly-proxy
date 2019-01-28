@@ -16,6 +16,7 @@ const port = 3000;
 const expressInstance = stoppable(
 	createExpressInstance({
 		recordingDirectory: path.resolve(program.recordingDir as string),
+		handleStop,
 	}).listen(port),
 );
 
@@ -24,6 +25,11 @@ console.log(
 		program.recordingDir as string,
 	)}. See the docs for how to use: https://github.com/dustinsoftware/polly-proxy`,
 );
+
+function handleStop() {
+	console.log('Stop request received.');
+	expressInstance.stop(() => process.exit(0));
+}
 
 process.on('SIGTERM', () => {
 	console.log('SIGTERM received');

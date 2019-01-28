@@ -28,7 +28,13 @@ async function getOpenPort() {
 	return port;
 }
 
-export const createExpressInstance = ({ recordingDirectory }: { recordingDirectory: string }) =>
+export const createExpressInstance = ({
+	recordingDirectory,
+	handleStop,
+}: {
+	recordingDirectory: string;
+	handleStop: () => void;
+}) =>
 	express().use(
 		router
 			.get('/', async (req, res) => {
@@ -56,5 +62,9 @@ export const createExpressInstance = ({ recordingDirectory }: { recordingDirecto
 				}
 
 				res.status(200).send({ port: port });
+			})
+			.post('/stop', async (req, res) => {
+				res.status(200).send();
+				handleStop();
 			}),
 	);
