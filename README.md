@@ -1,4 +1,7 @@
 # polly proxy
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/dustinsoftware/polly-proxy.svg)](https://greenkeeper.io/)
+
 A proxy server configurable at runtime that can record and replay HTTP web requests. Uses the [Polly.JS library](https://netflix.github.io/pollyjs/#/) by Netflix, and [node-http-proxy](https://github.com/nodejitsu/node-http-proxy). 
 
 It was designed for use by applications written in any language (such as C#) that make external web requests during integration tests. Ideally you would consume Polly.JS directly in your tests so that the extra layer of indirection is unnecessary.
