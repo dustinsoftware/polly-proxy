@@ -1,10 +1,14 @@
 import stoppable from 'stoppable';
 import program from 'commander';
 import path from 'path';
-import { createExpressInstance } from './server';
+import { createExpressInstance, ServerOptions } from './server';
 
 program
 	.option('-r, --recordingDir <recordingDir>', 'Recording directory', 'recordings')
+	.option(
+		'-h, --hostRewrite <hostRewrite>',
+		'Rewrite the request host, comma separated. Eg source,target',
+	)
 	.parse(process.argv);
 
 process.on('unhandledRejection', exception => {
@@ -13,17 +17,18 @@ process.on('unhandledRejection', exception => {
 
 const port = 3000;
 
-const expressInstance = stoppable(
-	createExpressInstance({
-		recordingDirectory: path.resolve(program.recordingDir as string),
-		handleStop,
-	}).listen(port),
-);
+const serverOptions: ServerOptions = {
+	recordingDirectory: path.resolve(program.recordingDir as string),
+	hostRewrite: program.hostRewrite as string,
+	handleStop,
+};
+
+const expressInstance = stoppable(createExpressInstance(serverOptions).listen(port));
 
 console.log(
-	`Server listening on port ${port}. Recordings saved to ${path.resolve(
-		program.recordingDir as string,
-	)}. See the docs for how to use: https://github.com/dustinsoftware/polly-proxy`,
+	`Server listening on port ${port}. Recordings saved to ${
+		serverOptions.recordingDirectory
+	}. See the docs for how to use: https://github.com/dustinsoftware/polly-proxy`,
 );
 
 function handleStop() {

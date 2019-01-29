@@ -5,6 +5,8 @@ import workerFarm from 'worker-farm';
 import stoppable from 'stoppable';
 import { AddressInfo } from 'net';
 import fetch from 'isomorphic-fetch';
+import { WorkerEntryOptions } from './proxy-worker';
+import { PollyHostTransform } from './polly-service';
 
 interface WorkerFarm {
 	[x: string]: Workers;
@@ -28,13 +30,17 @@ async function getOpenPort() {
 	return port;
 }
 
+export interface ServerOptions {
+	recordingDirectory: string;
+	hostRewrite: string;
+	handleStop: () => void;
+}
+
 export const createExpressInstance = ({
 	recordingDirectory,
 	handleStop,
-}: {
-	recordingDirectory: string;
-	handleStop: () => void;
-}) =>
+	hostRewrite,
+}: ServerOptions) =>
 	express().use(
 		router
 			.get('/', async (req, res) => {
@@ -42,7 +48,20 @@ export const createExpressInstance = ({
 			})
 			.post('/worker', async (req, res) => {
 				const port = await getOpenPort();
-				workerNodes.workerEntry({ port, recordingDirectory }, (err: any, callbackData: string) => {
+
+				let parsedHostRewrite: PollyHostTransform | null = null;
+
+				if (hostRewrite != null) {
+					const splitHostTransform = hostRewrite.split(',');
+					parsedHostRewrite = { from: splitHostTransform[0], to: splitHostTransform[1] };
+				}
+
+				const workerEntryData: WorkerEntryOptions = {
+					port,
+					recordingDirectory,
+					hostRewrite: parsedHostRewrite,
+				};
+				workerNodes.workerEntry(workerEntryData, (err: any, callbackData: string) => {
 					if (err) {
 						console.error(err);
 					}

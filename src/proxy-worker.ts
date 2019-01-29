@@ -2,7 +2,7 @@ import express from 'express';
 import expressPromiseRouter from 'express-promise-router';
 import { AddressInfo } from 'net';
 import stoppable, { StoppableServer } from 'stoppable';
-import { PollyService, PollyServiceOptions } from './polly-service';
+import { PollyService, PollyServiceOptions, PollyHostTransform } from './polly-service';
 import { ProxyService } from './proxy-service';
 
 const router = expressPromiseRouter();
@@ -97,15 +97,21 @@ export const createExpressInstance = () =>
 			}),
 	);
 
+export interface WorkerEntryOptions {
+	port: number;
+	recordingDirectory: string;
+	hostRewrite: PollyHostTransform | null;
+}
+
 export function workerEntry(
-	data: { port: number; recordingDirectory: string },
+	data: WorkerEntryOptions,
 	callback: (err: Error | null, result: any) => void,
 ) {
 	if (expressInstance != null) {
 		throw new Error('expressInstance has already been initialized!');
 	}
 
-	pollyService = new PollyService(data.recordingDirectory);
+	pollyService = new PollyService(data.recordingDirectory, data.hostRewrite);
 	proxyService = new ProxyService();
 
 	expressInstance = stoppable(createExpressInstance().listen(data.port));
@@ -120,6 +126,6 @@ export function workerEntry(
 }
 
 export function testEntry(recordingDirectory: string) {
-	pollyService = new PollyService(recordingDirectory);
+	pollyService = new PollyService(recordingDirectory, null);
 	proxyService = new ProxyService();
 }

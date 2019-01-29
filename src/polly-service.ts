@@ -12,14 +12,22 @@ export interface PollyServiceOptions {
 	order?: boolean;
 }
 
+export interface PollyHostTransform {
+	from: string;
+	to: string;
+}
+
 export class PollyService {
-	constructor(recordingDirectory: string) {
+	constructor(recordingDirectory: string, hostTransforms: PollyHostTransform | null) {
 		this._recordingDirectory = recordingDirectory;
+		this._hostTransform = hostTransforms;
 	}
 
 	private _recordingDirectory: string;
 
 	private _pollyInstance: Polly | null = null;
+
+	private _hostTransform: PollyHostTransform | null;
 
 	isInitialized = () => this._pollyInstance != null;
 
@@ -53,6 +61,18 @@ export class PollyService {
 				order: true,
 				url: {
 					protocol: false,
+					hostname: host => {
+						if (this._hostTransform == null) {
+							return host;
+						}
+
+						if (host === this._hostTransform.from) {
+							return this._hostTransform.to;
+						}
+
+						return host;
+					},
+					port: false,
 				},
 			},
 		});
