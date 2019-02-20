@@ -18,23 +18,23 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
-"@pollyjs/adapter-node-http@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@pollyjs/adapter-node-http/-/adapter-node-http-2.0.0.tgz#609f44f1777341b705e741eec8c5dd7ad5e7fbfc"
-  integrity sha512-Na1MYzqGMdEAmd47fV55mvMfLeq1/KIJfpJIx6tK4UITfbuNzAXqh02IGzTP7mrrbuZfeFB86cjySzQ7lLNW+w==
+"@pollyjs/adapter-node-http@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@pollyjs/adapter-node-http/-/adapter-node-http-2.2.0.tgz#3e72202ffedbe7da2e22cef5e9a3b223b5d32082"
+  integrity sha512-HwBf4SWXBD7jaTkXQdU0nn5iNlrzVg+FttKT8S8qliSmC+qc4z4FthZv4cqUFNGaiycrw3gjxtiNPyL/+kc/9w==
   dependencies:
-    "@pollyjs/adapter" "^2.0.0"
-    "@pollyjs/utils" "^2.0.0"
+    "@pollyjs/adapter" "^2.2.0"
+    "@pollyjs/utils" "^2.1.0"
     lodash-es "^4.17.11"
     nock "^10.0.6"
     semver "^5.6.0"
 
-"@pollyjs/adapter@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@pollyjs/adapter/-/adapter-2.0.0.tgz#9f1fa599b0f8e5a91027c7c2626348bad17757aa"
-  integrity sha512-sIoQv9xzXGUzdltdnbdMYMxiq0uzx2U6/Qz2xD/Io6/sCpXO826i0+sRvFMTTdpaPLY3vxhXs839HGDBD5wE+A==
+"@pollyjs/adapter@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@pollyjs/adapter/-/adapter-2.2.0.tgz#8d996b3078b6ca38e2be76dcf6bd93acb1f8ee3c"
+  integrity sha512-l6l3gWguDgfloPmmvGTUzEJNbo+LokOlQKgazWvTDwVTmUw6iQ2VAy798L+vMoLfqmp0H7ChZXdx1ReV29MgOA==
   dependencies:
-    "@pollyjs/utils" "^2.0.0"
+    "@pollyjs/utils" "^2.1.0"
 
 "@pollyjs/core@^2.0.0":
   version "2.0.0"
@@ -88,6 +88,14 @@
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@pollyjs/utils/-/utils-2.0.0.tgz#e04c567fca85c338e486e18c8db599ab783e9a44"
   integrity sha512-X1+ixyWxV9R2p6EvTB47RL7GoYgKPrJt5slB4D5lCnspAlV4QwQiS2YctKhYExkUgjLQC0bpC+E+BjCfxV6fog==
+  dependencies:
+    qs "^6.6.0"
+    url-parse "^1.4.4"
+
+"@pollyjs/utils@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@pollyjs/utils/-/utils-2.1.0.tgz#2d52f625c0d96eba1e9ef18476d6dc18dddf6ba1"
+  integrity sha512-psHTlcQZuKxG9ZACzcCo/omOFc4LbYRx4ASjWxR7TmOZKzcR653R0/APL8SXGRfGPD8RsFOGSSbXzjXyUX+g7A==
   dependencies:
     qs "^6.6.0"
     url-parse "^1.4.4"
