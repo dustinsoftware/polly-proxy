@@ -5,7 +5,7 @@
 	"license": "MIT",
 	"dependencies": {
 		"@pollyjs/adapter-node-http": "^2.0.0",
-		"@pollyjs/core": "^2.0.0",
+		"@pollyjs/core": "^2.3.0",
 		"@pollyjs/persister-fs": "^2.0.0",
 		"commander": "^2.19.0",
 		"express": "^4.16.4",
