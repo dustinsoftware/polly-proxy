@@ -178,10 +178,10 @@
   resolved "https://registry.yarnpkg.com/@types/pollyjs__adapter/-/pollyjs__adapter-1.3.0.tgz#2257e446260cb1d89ad97f1ebd78f95615623ba8"
   integrity sha512-jnjf9Zg1OuKLs7Uh6xyZaZzN4RqPZXulJZjtVkm32jpztM+/nArjqkWpA5G+5MXpgPudVEqbaBBAsZOTrtAGBg==
 
-"@types/pollyjs__core@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@types/pollyjs__core/-/pollyjs__core-1.3.0.tgz#61803d630b7db5928aa9eff90a5a4ee9584c3338"
-  integrity sha512-F8DNmjv+e6weS0W9Va2sybiorZW6kA1ZKHN+IzT350iPlCHVEg3XWxkTjHUwYjEVXSNf5GKwdn8Y7tQcPgloFA==
+"@types/pollyjs__core@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@types/pollyjs__core/-/pollyjs__core-2.2.0.tgz#895e109745a3c59a3156f5b15c4df9c416da37f5"
+  integrity sha512-vmBKWyThS2B+k83qiby5NJqtcnCxhBtEtUlh/RFfFQ4Mo2cCGVKGlVKWvRaTAEAnjKQK0z4uh1qTHJAmW8D9zg==
   dependencies:
     "@types/pollyjs__adapter" "*"
     "@types/pollyjs__persister" "*"
