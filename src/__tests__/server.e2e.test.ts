@@ -117,31 +117,6 @@ describe('server e2e', () => {
 		).toBe(5);
 	});
 
-	it('returns 500 if proxied service is down', async () => {
-		await fetch(`${proxyInstanceUrl}record?testName=returns-500`, {
-			method: 'POST',
-		}).then(x => x.text());
-
-		let response = await fetch(
-			`${proxyInstanceUrl}addproxy?proxyPath=${encodeURIComponent(`https://localhost:12345`)}`,
-			{
-				method: 'POST',
-			},
-		).then(x => x.json());
-		expect(response.port).toBeGreaterThan(3000);
-
-		expect(
-			await fetch(`http://localhost:${response.port}`, { method: 'POST' }).then(x => x.status),
-		).toBe(500);
-
-		await new Promise(resolve => setTimeout(resolve, 100));
-
-		// ensure app is still running
-		expect(
-			await fetch(`http://localhost:${response.port}`, { method: 'POST' }).then(x => x.status),
-		).toBe(500);
-	});
-
 	it('returns 400 if required parameters are empty', async () => {
 		expect((await fetch(`${proxyInstanceUrl}record`, { method: 'POST' })).status).toBe(400);
 		expect((await fetch(`${proxyInstanceUrl}replay`, { method: 'POST' })).status).toBe(400);
