@@ -14,7 +14,7 @@
 		"isomorphic-fetch": "^2.2.1",
 		"stoppable": "^1.1.0",
 		"webpack-node-externals": "^1.7.2",
-		"worker-farm": "^1.6.0"
+		"worker-farm": "1.6.0"
 	},
 	"bin": {
 		"polly-proxy": "./bin/polly-proxy"
