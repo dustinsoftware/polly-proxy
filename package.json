@@ -45,7 +45,7 @@
 		"prettier": "^1.15.3",
 		"start-server-and-test": "^1.7.11",
 		"supertest": "^4.0.1",
-		"ts-jest": "^24.0.0",
+		"ts-jest": "^24.0.2",
 		"ts-loader": "^5.3.1",
 		"tslint": "^5.12.1",
 		"tslint-config-prettier": "^1.17.0",
